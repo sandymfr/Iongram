@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Http } from '@angular/http';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { UserService } from '../user.service';
@@ -13,6 +13,8 @@ export class UploaderPage implements OnInit {
 
   imageURL: string
   desc: string
+
+  @ViewChild('fileButton') fileButton
 
   constructor(public http: Http,
     public afstore: AngularFirestore,
@@ -49,5 +51,10 @@ export class UploaderPage implements OnInit {
       })
     })
   }
+
+  uploadFile() {
+    this.fileButton.nativeElement.click()
+  }
+
 
 }
