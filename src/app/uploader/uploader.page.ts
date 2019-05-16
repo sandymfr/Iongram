@@ -23,9 +23,28 @@ export class UploaderPage implements OnInit {
   ngOnInit() {
   }
 
+  createPost() {
+    const image = this.imageURL
+    const desc = this.desc
+
+    this.afstore.doc(`users/${this.user.getUID()}`).update({
+      posts: firestore.FieldValue.arrayUnion(image)
+    })
+
+		this.afstore.doc(`posts/${image}`).set({
+			desc,
+			author: this.user.getUsername(),
+			likes: []
+		})
+
+  }
+
+  uploadFile() {
+    this.fileButton.nativeElement.click()
+  }
+
   fileChanged(event) {
     const files = event.target.files
-    console.log(files)
 
     const data = new FormData()
     data.append('file', files[0])
@@ -39,22 +58,4 @@ export class UploaderPage implements OnInit {
       this.imageURL = event.json().file
     })
   }
-
-  createPost() {
-    const image = this.imageURL
-    const desc = this.desc
-
-    this.afstore.doc(`users/${this.user.getUID()}`).update({
-      posts: firestore.FieldValue.arrayUnion({
-        image, 
-        desc
-      })
-    })
-  }
-
-  uploadFile() {
-    this.fileButton.nativeElement.click()
-  }
-
-
 }
