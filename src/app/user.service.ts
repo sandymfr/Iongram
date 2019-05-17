@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { first } from 'rxjs/operators'
+import { auth } from 'firebase/app'
 
 interface user {
     username: string,
@@ -22,7 +23,19 @@ export class UserService {
 
     getUsername(): string {
         return this.user.username
-    }
+	}
+	
+	reAuth(username: string, password: string) {
+		return this.afAuth.auth.currentUser.reauthenticateWithCredential(auth.EmailAuthProvider.credential(username + '@ionic.com', password))
+	}
+
+	updatePassword(newpassword: string) {
+		this.afAuth.auth.currentUser.updatePassword(newpassword)
+	}
+	
+	updateEmail(newemail: string) {
+		this.afAuth.auth.currentUser.updateEmail(newemail + '@ionic.com')
+	}
 
     async isAuthenticated() {
 		if(this.user) return true
